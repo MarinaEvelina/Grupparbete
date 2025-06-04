@@ -1,9 +1,7 @@
 import org.mariadb.jdbc.Statement;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,9 +9,13 @@ import static java.sql.DriverManager.getConnection;
 
 public class MenyVal {
 
-    //Connection dbConnection = null; // vår koppling
+    Connection dbConnection = null; // vår koppling
     Statement statement = null;     // vår SQL-fråga
     ResultSet rs = null;            // fångar upp resultatet som vi får tillbaka.
+
+    public Connection getDbConnection() {
+        return dbConnection;
+    }
 
     private final Scanner inMatning;
 
@@ -29,6 +31,7 @@ public class MenyVal {
         System.out.println("3. Uppdatera information ");
         System.out.println("4. Radera information ");
         System.out.println("5. Avsluta och spara ");
+        System.out.println("\nVälj alternativ: ");
 
         int valStr = 0;
         while (true) {
@@ -54,11 +57,12 @@ public class MenyVal {
         System.out.println("-----ANVÄNDARE-----");
 
         try {
-            String strSql = "SELECT förnamn, personlig_budget FROM Användare ORDER BY förnamn ASC";
-            statement = getConnection(DatabasConnection ).createStatement();
+            String strSql = "SELECT rm.r_id, a.förnamn, a.efternamn, rm.stadsnamn, rm.landsnamn, rm.r_typ, rm.res_från, rm.res_till FROM Användare AS a, Resmål AS rm, Resmålsplan AS rmp WHERE a.personnummer = rmp.personnummer AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
+            statement = (Statement) DatabasConnection.dbConnection().createStatement();
             rs = statement.executeQuery(strSql);
             while (rs.next()){
-                System.out.println(rs.getString("förnamn") + ", " + rs.getInt("personlig_budget"));
+                System.out.println(rs.getInt("rm.r_id") + ". " + rs.getString("a.förnamn") + " " + rs.getString("a.efternamn") + "\n" + rs.getString("rm.stadsnamn") + ", " + rs.getString("rm.landsnamn") + ", " + rs.getString("rm.r_typ") + ", " +
+                        rs.getDate("rm.res_från") + " - " + rs.getDate("rm.res_till") + "\n------------------------------------------------------");
             }
         } catch (SQLException ex){
             System.err.println("Ett fel har inträffat: " + ex.toString());
@@ -72,6 +76,50 @@ public class MenyVal {
         System.out.println("----------------------");
         System.out.println("----LÄGG TILL RESA----");
         System.out.println("");
+
+        System.out.println("Vilket land reser du till?");
+        inMatning.nextLine();
+        String land = inMatning.nextLine();
+
+        System.out.println("Vilken stad vill du resa till?");
+        inMatning.nextLine();
+        String stad = inMatning.nextLine();
+
+        System.out.println("Vilket datum reser du från? (YYYY-MM-DD)");
+        inMatning.nextLine();
+        String datumFran = inMatning.nextLine();
+
+        System.out.println("Vilket datum reser du till? (YYYY-MM-DD)");
+        inMatning.nextLine();
+        String datumTill = inMatning.nextLine();
+
+        System.out.println("Vilken typ av resa? \nVälj mellan:\n- Solsemetser\n- Stadsresa\n- Affärsresa\n- Friluftsresa\n- Kulturresa\n- Annat ");
+        inMatning.nextLine();
+        String resetyp = inMatning.nextLine();
+
+        String rID = null;
+
+        System.out.println(land + stad + datumFran + datumTill + resetyp);
+
+
+        try {
+            String strSql = "INSERT INTO rm.r_id, a.förnamn, a.efternamn, rm.stadsnamn, " +
+                    "rm.landsnamn, rm.r_typ, rm.res_från, rm.res_till " +
+                    "FROM Användare AS a, Resmål AS rm, Resmålsplan AS rmp " +
+                    "WHERE a.personnummer = rmp.personnummer AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
+            statement = (Statement) DatabasConnection.dbConnection().createStatement();
+            rs = statement.executeQuery(strSql);
+            while (rs.next()){
+                System.out.println(rs.getInt("rm.r_id") + ". " + rs.getString("a.förnamn")
+                        + " " + rs.getString("a.efternamn") + "\n" + rs.getString("rm.stadsnamn")
+                        + ", " + rs.getString("rm.landsnamn") + ", " + rs.getString("rm.r_typ") + ", " +
+                        rs.getDate("rm.res_från") + " - " + rs.getDate("rm.res_till")
+                        + "\n------------------------------------------------------");
+            }
+        } catch (SQLException ex){
+            System.err.println("Ett fel har inträffat: " + ex.toString());
+        }
+
     }
 
     public void redigeraResa() {
@@ -85,9 +133,5 @@ public class MenyVal {
         System.out.println("-----RADERA RESA-----");
         System.out.println("Ange platsnummer för det resmål som du vill radera:");
     }
-
-
-
-
 
 }
