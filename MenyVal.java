@@ -113,11 +113,19 @@ public class MenyVal {
 
     }
 
-    public void redigeraResa() {
+   public void redigeraResa() {
         System.out.println("---------------------");
         System.out.println("----REDIGERA RESA----");
-        System.out.println("Ange platsnummer för det resmål som du vill redigera:");
-    }
+        System.out.println("Ange nummer på den resa som du vill uppdatera ditt datum: ");
+        inMatning.nextInt();
+        int valSiffra = inMatning.nextInt();
+
+        if (valSiffra >= 1 && valSiffra <= )
+
+
+        System.out.println("1. Uppdatera datum du reser från");
+        System.out.println("2. Uppdatera datum du reser till");
+        System.out.println("\nVänligen välj vad du vill uppdatera: ");
 
     public void raderaResa() {
         System.out.println("---------------------");
