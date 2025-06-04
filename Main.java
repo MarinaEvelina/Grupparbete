@@ -28,7 +28,7 @@ public class Main {
                     meny.redigeraResa();
                     break;
                 case 4:
-                    meny.raderaResa();
+                    meny.raderaAktivitet();
                     break;
                 case 5:
                     meny.avsluta();
