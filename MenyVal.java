@@ -127,10 +127,29 @@ public class MenyVal {
         System.out.println("2. Uppdatera datum du reser till");
         System.out.println("\nVänligen välj vad du vill uppdatera: ");
 
-    public void raderaResa() {
+      public void raderaAktivitet() {
         System.out.println("---------------------");
-        System.out.println("-----RADERA RESA-----");
-        System.out.println("Ange platsnummer för det resmål som du vill radera:");
-    }
+        System.out.println("-----RADERA AKTIVITET-----");
+        System.out.println("Ange vilken aktivitet du vill radera\n---------------------");
 
+        try {
+            String strSql = "SELECT ak.r_id, rm.stadsnamn, ak.a_namn, ak.a_budget, ak.a_datum, an.förnamn, an.efternamn " +
+                    "FROM Aktivitet AS ak, Resmål AS rm, Resmålsplan AS rmp, Användare AS an " +
+                    "WHERE ak.r_id = rm.r_id AND rm.r_id = rmp.r_id AND an.personnummer = rmp.personnummer ORDER BY ak.r_id";
+            statement = (Statement) DatabasConnection.dbConnection().createStatement();
+            rs = statement.executeQuery(strSql);
+
+            while (rs.next()) {
+                System.out.println(rs.getInt("ak.r_id") + ". " + rs.getString("rm.stadsnamn") + " - "
+                        + rs.getString("ak.a_namn") + "\n" + rs.getInt("ak.a_budget") + " kr, "
+                        + rs.getDate("ak.a_datum") + ", " + rs.getString("an.förnamn") + " " +
+                        rs.getString("an.efternamn") + "\n------------------------------------------------------");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Ett fel har inträffat: " + ex.toString());
+
+            //Ta bort en aktivitet är vad som är kvar på denna
+
+        }
+    }
 }
