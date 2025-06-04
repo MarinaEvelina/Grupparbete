@@ -70,7 +70,6 @@ public class MenyVal {
 
     }
 
-
     //lägga till resor
     public void laggTillResa() {
         System.out.println("----------------------");
@@ -82,43 +81,35 @@ public class MenyVal {
         String land = inMatning.nextLine();
 
         System.out.println("Vilken stad vill du resa till?");
-        inMatning.nextLine();
         String stad = inMatning.nextLine();
 
         System.out.println("Vilket datum reser du från? (YYYY-MM-DD)");
-        inMatning.nextLine();
         String datumFran = inMatning.nextLine();
 
         System.out.println("Vilket datum reser du till? (YYYY-MM-DD)");
-        inMatning.nextLine();
         String datumTill = inMatning.nextLine();
 
-        System.out.println("Vilken typ av resa? \nVälj mellan:\n- Solsemetser\n- Stadsresa\n- Affärsresa\n- Friluftsresa\n- Kulturresa\n- Annat ");
-        inMatning.nextLine();
+        System.out.println("Vilken typ av resa? \nVälj mellan:\n- Solsemester\n- Stadsresa\n- Affärsresa\n- Friluftsresa\n- Kulturresa\n- Annat ");
         String resetyp = inMatning.nextLine();
 
         String rID = null;
 
-        System.out.println(land + stad + datumFran + datumTill + resetyp);
+
 
 
         try {
-            String strSql = "INSERT INTO rm.r_id, a.förnamn, a.efternamn, rm.stadsnamn, " +
-                    "rm.landsnamn, rm.r_typ, rm.res_från, rm.res_till " +
-                    "FROM Användare AS a, Resmål AS rm, Resmålsplan AS rmp " +
-                    "WHERE a.personnummer = rmp.personnummer AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
+            String strSql = "INSERT INTO Resmål (stadsnamn, res_från, res_till, r_typ, r_id, landsnamn) " +
+                    "VALUES ('" + stad + "', '" + datumFran + "', '" + datumTill + "', '" + resetyp + "', " + rID + ", '" + land + "');";
             statement = (Statement) DatabasConnection.dbConnection().createStatement();
             rs = statement.executeQuery(strSql);
-            while (rs.next()){
-                System.out.println(rs.getInt("rm.r_id") + ". " + rs.getString("a.förnamn")
-                        + " " + rs.getString("a.efternamn") + "\n" + rs.getString("rm.stadsnamn")
-                        + ", " + rs.getString("rm.landsnamn") + ", " + rs.getString("rm.r_typ") + ", " +
-                        rs.getDate("rm.res_från") + " - " + rs.getDate("rm.res_till")
-                        + "\n------------------------------------------------------");
-            }
+
+            System.out.println("\nDu har lagt till resan " + stad +" under datumen " + datumFran + "-" + datumTill);
+            
         } catch (SQLException ex){
             System.err.println("Ett fel har inträffat: " + ex.toString());
         }
+
+
 
     }
 
