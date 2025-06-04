@@ -146,11 +146,28 @@ public class MenyVal {
                         rs.getString("an.efternamn") + "\n------------------------------------------------------");
 
 //Ta bort en aktivitet är vad som är kvar på denna
-// string? för input (system.out.println("Ange vilken aktivitet du vill radera");
-// if-else sats
-//
+// string? för input (system.out.println("Ange vilken r_id för den aktivitet du vill radera")
+//kan vi använda String srtSql = "DELETE FROM Aktivitet WHERE r_id = ? "
+/*Typ nått sånt?
+        
+        System.out.println("Ange vilket i_id för den aktivitet du vill radera");
+        inMatning.nextLine();
+        int rID = inMatning.nextLine();
 
+        
+        try {
+            String srtSql = "DELETE FROM Aktivitet WHERE r_id = nått? 
+            Statement = (Statement) DatabasConnection.dbConnection().createStatement();
+            rs = statement.executeQuery(strSql);
 
+        en variabel??
+
+        if (){
+            System.out.println("");
+        ) else {
+            System.out.println("");
+
+*/
 
             }
         } catch (SQLException ex) {
