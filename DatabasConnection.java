@@ -1,17 +1,26 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class DatabasConnection {
 
-    public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mariadb://atlantis.informatik.umu.se/svph2415_db2_vt2025?useSSL=true&trustServerCertificate=true";
-        String user = "svph2411";
-        Password mypw = new Password();
-        String password = mypw.getPassword();
+    public static Connection dbConnection() {
+        Connection dbConnection = null;
 
-        return DriverManager.getConnection(url, user, password);
+        try {
+            String url = "jdbc:mariadb://atlantis.informatik.umu.se/svph2426_db_vt2025?sslMode=trust";
+
+            String user = "svph2426";
+
+            Password mypw = new Password();
+
+            String password = mypw.getPassword();
+            dbConnection = DriverManager.getConnection(url, user, password);
+
+        } catch (Exception e) {
+            System.err.println("Fel");
+
+        }
+
+        return dbConnection;
     }
-
-
 }
