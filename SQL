@@ -49,9 +49,6 @@ public class Sql {
             System.err.println("Ett fel har uppstått: " + ex.toString());
         }
 
-
     }
-
-
 
 }
