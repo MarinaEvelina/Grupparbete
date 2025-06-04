@@ -144,11 +144,18 @@ public class MenyVal {
                         + rs.getString("ak.a_namn") + "\n" + rs.getInt("ak.a_budget") + " kr, "
                         + rs.getDate("ak.a_datum") + ", " + rs.getString("an.förnamn") + " " +
                         rs.getString("an.efternamn") + "\n------------------------------------------------------");
+
+//Ta bort en aktivitet är vad som är kvar på denna
+// string? för input (system.out.println("Ange vilken aktivitet du vill radera");
+// if-else sats
+//
+
+
+
             }
         } catch (SQLException ex) {
             System.err.println("Ett fel har inträffat: " + ex.toString());
 
-            //Ta bort en aktivitet är vad som är kvar på denna
 
         }
     }
