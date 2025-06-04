@@ -8,10 +8,10 @@ import java.sql.Statement;
 public class Main {
 
     public static void main(String[] args) {
+        MenyVal meny = new MenyVal();
 
 
 
-/*
         int menyVal = 0;
         while (menyVal != 5) {
             menyVal = meny.visaMeny();
@@ -37,9 +37,6 @@ public class Main {
                     System.out.println("Ogiltigt val. Försök igen.");
             }
         }
-
-
- */
 
 
 
