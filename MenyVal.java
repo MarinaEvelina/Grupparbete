@@ -1,5 +1,4 @@
 import org.mariadb.jdbc.Statement;
-
 import java.sql.*;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -11,6 +10,7 @@ public class MenyVal {
 
     Connection dbConnection = null; // vår koppling
     Statement statement = null;     // vår SQL-fråga
+    PreparedStatement preparedStatement = null;
     ResultSet rs = null;            // fångar upp resultatet som vi får tillbaka.
 
     public Connection getDbConnection() {
@@ -57,15 +57,17 @@ public class MenyVal {
         System.out.println("-----ANVÄNDARE-----");
 
         try {
-            String strSql = "SELECT rm.r_id, a.förnamn, a.efternamn, rm.stadsnamn, rm.landsnamn, rm.r_typ, rm.res_från, rm.res_till FROM Användare AS a, Resmål AS rm, Resmålsplan AS rmp WHERE a.personnummer = rmp.personnummer AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
+            String strSql = "SELECT rm.r_id, a.förnamn, a.efternamn, rm.stadsnamn, rm.landsnamn, rm.r_typ, rm.res_från, rm.res_till " +
+                    "FROM Användare AS a, Resmål AS rm, Resmålsplan AS rmp WHERE a.personnummer = rmp.personnummer " +
+                    "AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
             statement = (Statement) DatabasConnection.dbConnection().createStatement();
             rs = statement.executeQuery(strSql);
-            while (rs.next()){
+            while (rs.next()) {
                 System.out.println(rs.getInt("rm.r_id") + ". " + rs.getString("a.förnamn") + " " + rs.getString("a.efternamn") + "\n" + rs.getString("rm.stadsnamn") + ", " + rs.getString("rm.landsnamn") + ", " + rs.getString("rm.r_typ") + ", " +
                         rs.getDate("rm.res_från") + " - " + rs.getDate("rm.res_till") + "\n------------------------------------------------------");
             }
-        } catch (SQLException ex){
-            System.err.println("Ett fel har inträffat: " + ex.toString());
+        } catch (SQLException ex) {
+            System.err.println("Ett fel har inträffat: " + ex);
         }
 
     }
@@ -74,7 +76,7 @@ public class MenyVal {
     public void laggTillResa() {
         System.out.println("----------------------");
         System.out.println("----LÄGG TILL RESA----");
-        System.out.println("");
+        System.out.println();
 
         System.out.println("Vilket land reser du till?");
         inMatning.nextLine();
@@ -94,43 +96,29 @@ public class MenyVal {
 
         String rID = null;
 
-
-
-
         try {
             String strSql = "INSERT INTO Resmål (stadsnamn, res_från, res_till, r_typ, r_id, landsnamn) " +
                     "VALUES ('" + stad + "', '" + datumFran + "', '" + datumTill + "', '" + resetyp + "', " + rID + ", '" + land + "');";
             statement = (Statement) DatabasConnection.dbConnection().createStatement();
             rs = statement.executeQuery(strSql);
 
-            System.out.println("\nDu har lagt till resan " + stad +" under datumen " + datumFran + "-" + datumTill);
-            
-        } catch (SQLException ex){
-            System.err.println("Ett fel har inträffat: " + ex.toString());
+            System.out.println("\nDu har lagt till resan " + stad + " under datumen " + datumFran + "-" + datumTill);
+
+        } catch (SQLException ex) {
+            System.err.println("Ett fel har inträffat: " + ex);
         }
-
-
 
     }
 
-   public void redigeraResa() {
+    public void redigeraResa() {
         System.out.println("---------------------");
         System.out.println("----REDIGERA RESA----");
-        System.out.println("Ange nummer på den resa som du vill uppdatera ditt datum: ");
-        inMatning.nextInt();
-        int valSiffra = inMatning.nextInt();
+        System.out.println("Ange platsnummer för det resmål som du vill redigera:");
+    }
 
-        if (valSiffra >= 1 && valSiffra <= )
-
-
-        System.out.println("1. Uppdatera datum du reser från");
-        System.out.println("2. Uppdatera datum du reser till");
-        System.out.println("\nVänligen välj vad du vill uppdatera: ");
-
-      public void raderaAktivitet() {
+    public void raderaAktivitet() {
         System.out.println("---------------------");
         System.out.println("-----RADERA AKTIVITET-----");
-        System.out.println("Ange vilken aktivitet du vill radera\n---------------------");
 
         try {
             String strSql = "SELECT ak.r_id, rm.stadsnamn, ak.a_namn, ak.a_budget, ak.a_datum, an.förnamn, an.efternamn " +
@@ -144,41 +132,28 @@ public class MenyVal {
                         + rs.getString("ak.a_namn") + "\n" + rs.getInt("ak.a_budget") + " kr, "
                         + rs.getDate("ak.a_datum") + ", " + rs.getString("an.förnamn") + " " +
                         rs.getString("an.efternamn") + "\n------------------------------------------------------");
+            }
 
-//Ta bort en aktivitet är vad som är kvar på denna
-// string? för input (system.out.println("Ange vilken r_id för den aktivitet du vill radera")
-//kan vi använda String srtSql = "DELETE FROM Aktivitet WHERE r_id = ? "
-/*Typ nått sånt?
-        
-        System.out.println("Ange vilket i_id för den aktivitet du vill radera");
-        inMatning.nextLine();
-        int rID = inMatning.nextLine();
+            System.out.println("Ange siffran på aktiviteten du du vill radera\n---------------------");
+            int r_id = inMatning.nextInt();
 
-        
-        try {
-            String srtSql = "DELETE FROM Aktivitet WHERE r_id = nått? 
-            Statement = (Statement) DatabasConnection.dbConnection().createStatement();
-            rs = statement.executeQuery(strSql);
+            try {
 
-        en variabel??
-
-        if (){
-            System.out.println("");
-        ) else {
-            System.out.println("");
-
-*/
+                String stSql = "DELETE FROM Aktivitet WHERE r_id = " + r_id + "; ";
+                PreparedStatement preparedStatement = (PreparedStatement) DatabasConnection.dbConnection().prepareStatement(stSql);
+                preparedStatement.setInt(1, r_id);
+                preparedStatement.executeUpdate();
+                System.out.println("Aktiviteten " + r_id + " har raderats.");
+                
+            } catch (SQLException e) {
+                System.err.println("Ett fel har inträffat: " + e);
 
             }
+
         } catch (SQLException ex) {
-            System.err.println("Ett fel har inträffat: " + ex.toString());
+            System.err.println("Ett fel har inträffat: " + ex);
 
 
         }
-    }
-
-           public void avsluta() {
-        System.out.println("______________________________");
-        System.out.println("PROGRAMMET AVSLUTAS OCH SPARAS");
     }
 }
