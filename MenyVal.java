@@ -196,4 +196,9 @@ public class MenyVal {
 
         }
     }
+
+public void avsluta() {
+        System.out.println("______________________________");
+        System.out.println("PROGRAMMET AVSLUTAS OCH SPARAS");
+    }
 }
