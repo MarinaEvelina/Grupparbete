@@ -115,6 +115,46 @@ public class MenyVal {
         System.out.println("----REDIGERA RESA----");
         System.out.println("Ange platsnummer för det resmål som du vill redigera:");
     }
+    try {
+            String strSql = "SELECT an.förnamn, an.efternamn, rm.stadsnamn, rm.landsnamn, rm.res_från, rm.res_till  " +
+                    "FROM Resmål AS rm, Resmålsplan AS rmp, Användare AS an " +
+                    "WHERE a.personnummer = rmp.personnummer AND rm.r_id = rmp.r_id ORDER BY rm.r_id";
+            statement = (Statement) DatabasConnection.dbConnection().createStatement();
+            rs = statement.executeQuery(strSql);
+
+            while (rs.next()) {
+                System.out.println(rs.getInt("rm.r_id") + ". " + rs.getString("a.förnamn") + " " + rs.getString("a.efternamn") + "\n" + rs.getString("rm.stadsnamn") + ", " + rs.getString("rm.landsnamn") + ", " + rs.getString("rm.r_typ") + ", " +
+                        rs.getDate("rm.res_från") + " - " + rs.getDate("rm.res_till") + "\n------------------------------------------------------");
+            }
+        }catch (SQLException ex){
+                    System.err.println("Ett fel har inträffat: " + ex.toString());
+                }
+
+/*
+        System.out.println("1. Uppdatera datum du reser från");
+        System.out.println("2. Uppdatera datum du reser till");
+        System.out.println("\nVänligen välj vad du vill uppdatera: ");
+
+
+
+
+
+        int valdSiffra = 0;
+        while (true) {
+            try {
+                valdSiffra = inMatning.nextInt();
+                if (valdSiffra >= 1 && valdSiffra <= 2) {
+                    break;
+                } else {
+                    System.out.println("Var god ange en siffra 1-5");
+                    inMatning.nextLine();
+                }
+            } catch (InputMismatchException ex) {
+                System.out.println("Något gick fel, var god försök igen och ange en siffra mellan 1-5");
+                inMatning.nextLine();
+            }
+        }
+*/
 
     public void raderaAktivitet() {
         System.out.println("---------------------");
